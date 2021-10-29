@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
-import { FullComponent } from './full/full.component';
+import { ListComponent } from './list/list.component';
+import { RegisterComponent } from './register/register.component';
 
 export const PagesRoutings: Routes = [
-  {path: 'item', component: FullComponent},
-  {path: '**', redirectTo: 'item'},
+  {path: 'list', component: ListComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: '**', redirectTo: 'list'},
 ];
