@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 export class AppComponent implements OnInit {
   title = 'senior-challenge';
   typeInScreen = null;
+  typeInOptions = ['register', 'list'];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -26,14 +27,22 @@ export class AppComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit(): void {
-    const fullLocation = this.location.path();
-    const route = fullLocation.substr(fullLocation.indexOf('/') + 1, fullLocation.length);
+    const route = this.getRoute();
     this.selectOptionMenu(route);
   }
 
+  getRoute(): string {
+    const fullLocation = this.location.path();
+    const route = fullLocation.substr(fullLocation.indexOf('/') + 1, fullLocation.length);
+    return route;
+  }
+
   selectOptionMenu(option: string): void {
-    this.typeInScreen = option;
     this.router.navigate([option]);
+  }
+
+  getTypeInScreen(): string {
+    return this.typeInOptions.find(f => this.getRoute().indexOf(f) !== -1);
   }
 }
 

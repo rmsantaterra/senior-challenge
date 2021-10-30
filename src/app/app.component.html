@@ -3,12 +3,10 @@
         [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
         <mat-toolbar style="background-color: #3f51b5;"></mat-toolbar>
         <mat-nav-list>
-            <a mat-list-item (click)="selectOptionMenu('list')"
-          [ngClass]="typeInScreen === 'list' ? 'selected-menu' : ''">Listagem</a>
-        <a mat-list-item (click)="selectOptionMenu('register')"
-          [ngClass]="typeInScreen === 'register' ? 'selected-menu' : ''">Registro</a>
-            <!-- <a mat-list-item>Listagem</a>
-            <a mat-list-item>Registro</a> -->
+            <a mat-list-item (click)="selectOptionMenu('list')" class="font-apple"
+                [ngClass]="getTypeInScreen() === 'list' ? 'selected-menu' : ''">Listagem</a>
+            <a mat-list-item (click)="selectOptionMenu('register')" class="font-apple"
+                [ngClass]="getTypeInScreen() === 'register' ? 'selected-menu' : ''">Registro</a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="sidenav-content">
@@ -17,21 +15,12 @@
                 *ngIf="isHandset$ | async">
                 <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
-            <span>Itens</span>
+            <span class="font-apple">Itens</span>
         </mat-toolbar>
-        <!-- Add Content Here -->
 
         <div class="full-content">
-            <!-- <div *ngIf="typeInScreen === 'list'">
-          <app-list> </app-list>
-        </div>
-        <div *ngIf="typeInScreen === 'register'">
-          <app-register> </app-register>
-        </div> -->
-
             <router-outlet>
             </router-outlet>
-
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,1 +1,143 @@
-<p>register works!</p>
+<div class="full">
+
+    <div class="title" (click)="teste()">
+        {{ type }}
+    </div>
+
+    <div [formGroup]="itemForm">
+
+        <div fxLayout="column" class="form-margin">
+
+            <div fxFlex="100" class="box-row">
+                <div class="align-text" fxFlex="130px">
+                    Nome
+                </div>
+
+                <div class="align-contents" fxFlex="auto">
+                    <mat-form-field>
+                        <input matInput type="text" maxlength="50" [formControl]="itemForm.controls.name"
+                            [ngClass]="itemForm.controls.name.touched && itemForm.controls.name.invalid ? 'error-field' : ''">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row" fxFlex="100" class="box-row">
+
+                <div fxFlex="50">
+                    <div class="align-text" fxFlex="130px">
+                        Unidade de Medida
+                    </div>
+
+                    <div class="align-contents" fxFlex="50" style="padding-right: 5px;">
+                        <mat-form-field>
+                            <mat-select class="select-field" [formControl]="itemForm.controls.measurementUnit"
+                                [ngClass]="itemForm.controls.measurementUnit.touched && itemForm.controls.measurementUnit.invalid ? 'error-field' : ''">
+                                <mat-option *ngFor="let x of OptionsMeasurement" [value]="x">
+                                    <span>{{x}}</span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxFlex="50" style="justify-content: flex-end;">
+                    <div class="align-text" fxFlex="80px">
+                        Quantidade
+                    </div>
+
+                    <div class="align-contents" fxFlex="50">
+                        <mat-form-field>
+                            <input matInput type="number" min="0" [formControl]="itemForm.controls.quantity"
+                                [ngClass]="itemForm.controls.quantity.touched && itemForm.controls.quantity.invalid ? 'error-field' : ''">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- #9c9c9c -->
+                    <div class="btn-num" style="margin-right: 27px; background-color: #fc6464;"
+                        (click)="changeQuantity('remove')"
+                        [ngClass]="!itemForm.controls.quantity.value ? 'btn-disabled' : ''">
+                        <mat-icon aria-hidden="false" class="icon-btn">remove</mat-icon>
+                    </div>
+
+                    <div class="btn-num" style="margin-right: 10px; background-color: #2c7c9c;"
+                        (click)="changeQuantity('add')">
+                        <mat-icon aria-hidden="false" class="icon-btn">add</mat-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div fxFlex="100" class="box-row">
+                <div class="align-text" fxFlex="130px">
+                    Preço
+                </div>
+
+                <div class="align-contents" fxFlex="25">
+                    <mat-form-field>
+                        <input matInput maxlength="7" currencyMask type="text" [formControl]="itemForm.controls.amount"
+                            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left'}"
+                            [ngClass]="itemForm.controls.amount.touched && itemForm.controls.amount.invalid ? 'error-field' : ''">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row" fxFlex="100" class="box-row" style="padding: 10px 0;">
+                <mat-checkbox [formControl]="itemForm.controls.perishable"
+                    (change)="onChangePerishable($event.checked)">
+                    <span class="font-apple">Perecível</span>
+                </mat-checkbox>
+
+            </div>
+
+            <div class="row" fxFlex="100" class="box-row">
+
+                <div fxFlex="50">
+                    <div class="align-text" fxFlex="130px">
+                        Data de Validade
+                    </div>
+
+                    <div class="align-contents" fxFlex="50">
+                        <mat-form-field>
+                            <input matInput type="date" [formControl]="itemForm.controls.validity"
+                                [ngClass]="itemForm.controls.validity.touched && itemForm.controls.validity.invalid ? 'error-field' : ''">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxFlex="50" style="justify-content: flex-end;">
+                    <div class="align-text" fxFlex="125px">
+                        Data de Fabricação
+                    </div>
+
+                    <div class="align-contents" fxFlex="50">
+                        <mat-form-field>
+                            <input matInput type="date" [formControl]="itemForm.controls.manufacturing"
+                                [ngClass]="itemForm.controls.manufacturing.touched && itemForm.controls.manufacturing.invalid ? 'error-field' : ''">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div fxLayout="row" style="padding-top: 50px;">
+
+                <div fxFlex="58"></div>
+
+                <div fxFlex="20">
+                    <button mat-raised-button class="default-back-button">
+                        <span>Cancelar</span>
+                    </button>
+                </div>
+
+                <div fxFlex="2"></div>
+
+                <div fxFlex="20">
+                    <button mat-raised-button class="default-button" (click)="save()">
+                        <span>Salvar</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
