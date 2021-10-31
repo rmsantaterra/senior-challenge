@@ -21,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { PipesModule } from '../utils/pipes/pipes/pipes.module';
 
 
@@ -49,6 +50,7 @@ import { PipesModule } from '../utils/pipes/pipes/pipes.module';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatTooltipModule,
     PipesModule.forRoot()
   ]
 })

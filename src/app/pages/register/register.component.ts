@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { Item } from 'src/app/models/item.model';
 import { measurementUnit } from 'src/app/utils/consts';
 import { measurementAbbreviation } from 'src/app/utils/methods';
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit {
   itemsArray: Array<Item> = [];
   type: string;
   item: Item = new Item();
+  optionsQuantity: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +43,8 @@ export class RegisterComponent implements OnInit {
       validity: [{ value: this.item.validity, disabled: !this.item.perishable }],
       manufacturing: [this.item.manufacturing, Validators.compose([Validators.required])],
     });
+
+    this.changeQuantityInput(this.item.measurementUnit);
 
   }
 
@@ -76,31 +80,16 @@ export class RegisterComponent implements OnInit {
     return (measurementAbbreviation(measurement));
   }
 
-  changeQuantityInput(measurement: measurementUnit): void {
-    const quantity = this.itemForm.controls.quantity.value ?
-      this.itemForm.controls.quantity.value.toString() : '';
-    let separator;
-    if (quantity.indexOf('.') !== -1) {
-      separator = '.';
-    } else if (quantity.indexOf(',') !== -1) {
-      separator = ',';
-    }
+  changeQuantityInput(measurement: measurementUnit): any {
     switch (measurement) {
       case measurementUnit.Liter:
       case measurementUnit.Kilogram:
-        const beforeSeparator = quantity.split(separator)[0];
-        const afterSeparator = quantity.split(separator)[1];
-        if (afterSeparator) {
-          afterSeparator.substring(0, 3);
-          this.itemForm.controls.quantity.setValue(`${Number(beforeSeparator)}${separator}${Number(afterSeparator.substring(0, 3))}`);
-        }
+        this.optionsQuantity = { prefix: '', thousands: '.', decimal: ',', align: 'left', precision: 3 };
         break;
       case measurementUnit.Unit:
-        if (separator) {
-          this.itemForm.controls.quantity.setValue(`${Number(quantity.split(separator)[0])}`);
-        }
-        break;
       default:
+
+        this.optionsQuantity = { prefix: '', thousands: '.', align: 'left', precision: 0 };
         break;
     }
   }
@@ -126,27 +115,42 @@ export class RegisterComponent implements OnInit {
     if (this.itemForm.valid) {
       const newItem = new Item();
       newItem.prepareObj(this.itemForm.controls);
-      if (this.type === 'Cadastro de Item') {
-        if (this.itemsArray) {
-          this.itemsArray.push(newItem);
-          localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
-        } else {
-          localStorage.setItem('itemsArray', JSON.stringify([newItem]));
-        }
+      const expired = moment().startOf('D') > moment(newItem.validity);
+      if (expired) {
         Swal.fire({
-          title: 'Item salvo com sucesso',
-          icon: 'success'
+          title: 'Ocorreu um erro ao salvar item',
+          text: 'Item vencido.',
+          icon: 'error'
+        });
+      } else if (newItem.validity && moment(newItem.manufacturing) > moment(newItem.validity)) {
+        Swal.fire({
+          title: 'Ocorreu um erro ao salvar item',
+          text: 'Data de fabricação não pode ser maior que data de validade.',
+          icon: 'error'
         });
       } else {
-        const indexEdit = this.itemsArray.findIndex(f => f.id === this.route.snapshot.params.id);
-        this.itemsArray[indexEdit] = newItem;
-        localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
-        Swal.fire({
-          title: 'Item cadastrado com sucesso',
-          icon: 'success'
-        });
+        if (this.type === 'Cadastro de Item') {
+          if (this.itemsArray) {
+            this.itemsArray.push(newItem);
+            localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
+          } else {
+            localStorage.setItem('itemsArray', JSON.stringify([newItem]));
+          }
+          Swal.fire({
+            title: 'Item salvo com sucesso',
+            icon: 'success'
+          });
+        } else {
+          const indexEdit = this.itemsArray.findIndex(f => f.id === this.route.snapshot.params.id);
+          this.itemsArray[indexEdit] = newItem;
+          localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
+          Swal.fire({
+            title: 'Item cadastrado com sucesso',
+            icon: 'success'
+          });
+        }
+        this.router.navigate(['']);
       }
-      this.router.navigate(['']);
 
     } else {
       this.itemForm.markAllAsTouched();

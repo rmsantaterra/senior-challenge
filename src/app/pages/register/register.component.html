@@ -31,6 +31,7 @@
                     <div class="align-contents" fxFlex="50" style="padding-right: 5px;">
                         <mat-form-field>
                             <mat-select class="select-field" [formControl]="itemForm.controls.measurementUnit"
+                                (selectionChange)="changeQuantityInput(itemForm.controls.measurementUnit.value)"
                                 [ngClass]="itemForm.controls.measurementUnit.touched && itemForm.controls.measurementUnit.invalid ? 'error-field' : ''">
                                 <mat-option *ngFor="let x of OptionsMeasurement" [value]="x">
                                     <span>{{x}}</span>
@@ -47,26 +48,29 @@
 
                     <div class="align-contents" fxFlex="50">
                         <mat-form-field>
-                            <input matInput type="number" min="0" [formControl]="itemForm.controls.quantity"
+                            <input matInput maxlength="8" currencyMask type="text"
                                 (input)="changeQuantityInput(itemForm.controls.measurementUnit.value)"
+                                [formControl]="itemForm.controls.quantity" [options]="optionsQuantity"
                                 [ngClass]="itemForm.controls.quantity.touched && itemForm.controls.quantity.invalid ? 'error-field' : ''">
                         </mat-form-field>
-                        <span style="width: 30px;">
-                            {{ measurementAbbreviation(itemForm.controls.measurementUnit.value) }}
-                        </span>
+
                     </div>
 
-                    <!-- #9c9c9c -->
-                    <div class="btn-num" style="margin-right: 47px; background-color: #fc6464;"
+                    <div class="btn-num" style="margin-right: 57px; background-color: #fc6464;"
                         (click)="changeQuantity('remove')"
                         [ngClass]="!itemForm.controls.quantity.value ? 'btn-disabled' : ''">
                         <mat-icon aria-hidden="false" class="icon-btn">remove</mat-icon>
                     </div>
 
-                    <div class="btn-num" style="margin-right: 30px; background-color: #2c7c9c;"
+                    <div class="btn-num" style="margin-right: 40px; background-color: #2c7c9c;"
                         (click)="changeQuantity('add')">
                         <mat-icon aria-hidden="false" class="icon-btn">add</mat-icon>
                     </div>
+
+                    <span class="box-addon" style="width: 30px;">
+                        {{ measurementAbbreviation(itemForm.controls.measurementUnit.value) }}
+                    </span>
+
                 </div>
             </div>
 
