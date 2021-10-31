@@ -18,6 +18,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { PipesModule } from '../utils/pipes/pipes/pipes.module';
 
 
 @NgModule({
@@ -42,6 +46,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgxCurrencyModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    PipesModule.forRoot()
   ]
 })
 export class PagesModule { }

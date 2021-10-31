@@ -9,35 +9,9 @@
     font-weight: 500;
     padding-bottom: 40px;
 }
-
-.sufix {
-    font-size: 12px;
-    color: #6a6a6a;
-}
-
-.red-border-class {
-    border: 1px solid rgba(255, 0, 0, 0.646);
-    background: #d19b9b34 !important;
-}
-
-.mat-error {
-    margin: 15px 5px !important;
-}
-
-.span-mat-error {
-    font-size: 12px;
-    position: absolute;
-    margin-top: 2px !important;
-    width: max-content;
-}
-
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
 }
 
 .form-margin {
@@ -45,26 +19,6 @@ input[type="number"] {
     font-weight: 600;
 }
 
-.align-contents {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 0px;
-    text-align: end;
-}
-
-.align-contents {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 0px;
-    text-align: end;
-}
-
-.align-text {
-    display: flex;
-    align-items: center;
-}
 
 mat-form-field {
     width: 100%;
@@ -156,22 +110,6 @@ input.mat-input-element {
     cursor: pointer;
 }
 
-.default-button {
-    width: 100%;
-    background-color: #3f51b5;
-    color: white !important;
-    font-size: 1rem !important;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-.default-button:hover {
-    background-color: #2b3882;
-    -webkit-transition: all 0.2s ease-out;
-    -moz-transition: all 0.2s ease-out;
-    -ms-transition: all 0.2s ease-out;
-    -o-transition: all 0.2s ease-out;
-    transition: all 0.2s ease-out;
-}
 
 .default-back-button {
     width: 100%;

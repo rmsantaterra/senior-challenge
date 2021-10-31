@@ -1,0 +1,65 @@
+table {
+    width: 100%;
+}
+
+.table {
+    border-radius: 0px 0px 0.21em 0.21em;
+    border: solid 1px #e3e7ee;
+    font-size: 1em;
+    height: calc(100vh - 290px);
+}
+
+tr.mat-header-row {
+    height: 3em;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.name-container {
+    width: 210px;
+}
+
+.txt-name {
+    cursor: pointer;
+    color: #1F95C0;
+}
+
+.qtd-container {
+    width: 120px;
+}
+
+.amount-container {
+    width: 120px;
+}
+
+.perishable-container {
+    width: 90px;
+}
+
+.validity-container {
+    width: 100px;
+}
+
+.manufacturing-container {
+    width: 100px;
+}
+
+.actions-container {
+    width: 77px;
+}
+
+.box-icons {
+    display: flex;
+    justify-content: end;
+    padding-top: 7px;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #005691;
+}
+
+.icon-actions {
+    font-size: 18px;
+    cursor: pointer;
+}

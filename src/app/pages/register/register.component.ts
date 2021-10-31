@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from 'src/app/models/item.model';
 import { measurementUnit } from 'src/app/utils/consts';
+import { measurementAbbreviation } from 'src/app/utils/methods';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,6 +14,7 @@ import Swal from 'sweetalert2';
 export class RegisterComponent implements OnInit {
   itemForm: FormGroup;
   OptionsMeasurement = [];
+  itemsArray: Array<Item> = [];
   type: string;
   item: Item = new Item();
 
@@ -23,8 +25,9 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.itemsArray = JSON.parse(localStorage.getItem('itemsArray'));
     this.getType();
+    this.initializeForm();
     this.getOptionsMeasurement();
   }
 
@@ -35,7 +38,7 @@ export class RegisterComponent implements OnInit {
       quantity: [this.item.quantity, Validators.compose([Validators.required])],
       amount: [this.item.amount, Validators.compose([Validators.required])],
       perishable: [this.item.perishable, Validators.compose([Validators.required])],
-      validity: [this.item.validity],
+      validity: [{ value: this.item.validity, disabled: !this.item.perishable }],
       manufacturing: [this.item.manufacturing, Validators.compose([Validators.required])],
     });
 
@@ -44,6 +47,7 @@ export class RegisterComponent implements OnInit {
   getType(): void {
     if (this.route.snapshot.params.id) {
       this.type = 'Edição de Item';
+      this.item = this.itemsArray.find(f => f.id === this.route.snapshot.params.id);
     } else {
       this.type = 'Cadastro de Item';
     }
@@ -51,10 +55,6 @@ export class RegisterComponent implements OnInit {
 
   getOptionsMeasurement(): void {
     this.OptionsMeasurement = [measurementUnit.Liter, measurementUnit.Kilogram, measurementUnit.Unit];
-  }
-
-  teste(): void {
-    console.log(localStorage.getItem('itemsArray'));
   }
 
   changeQuantity(type: string): void {
@@ -72,34 +72,82 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  measurementAbbreviation(measurement: measurementUnit): string {
+    return (measurementAbbreviation(measurement));
+  }
+
+  changeQuantityInput(measurement: measurementUnit): void {
+    const quantity = this.itemForm.controls.quantity.value ?
+      this.itemForm.controls.quantity.value.toString() : '';
+    let separator;
+    if (quantity.indexOf('.') !== -1) {
+      separator = '.';
+    } else if (quantity.indexOf(',') !== -1) {
+      separator = ',';
+    }
+    switch (measurement) {
+      case measurementUnit.Liter:
+      case measurementUnit.Kilogram:
+        const beforeSeparator = quantity.split(separator)[0];
+        const afterSeparator = quantity.split(separator)[1];
+        if (afterSeparator) {
+          afterSeparator.substring(0, 3);
+          this.itemForm.controls.quantity.setValue(`${Number(beforeSeparator)}${separator}${Number(afterSeparator.substring(0, 3))}`);
+        }
+        break;
+      case measurementUnit.Unit:
+        if (separator) {
+          this.itemForm.controls.quantity.setValue(`${Number(quantity.split(separator)[0])}`);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   onChangePerishable(fieldChecked): void {
     if (fieldChecked) {
+      this.itemForm.controls.validity.enable();
       this.itemForm.controls.validity.setValidators([Validators.required]);
       this.itemForm.controls.validity.updateValueAndValidity();
     } else {
+      this.itemForm.controls.validity.disable();
+      this.itemForm.controls.validity.setValue(null);
       this.itemForm.controls.validity.clearValidators();
       this.itemForm.controls.validity.updateValueAndValidity();
     }
+  }
+
+  cancel(): void {
+    this.router.navigate(['']);
   }
 
   save(): void {
     if (this.itemForm.valid) {
       const newItem = new Item();
       newItem.prepareObj(this.itemForm.controls);
-      const itemsArray: Array<Item> = JSON.parse(localStorage.getItem('itemsArray'));
       if (this.type === 'Cadastro de Item') {
-        if (itemsArray) {
-          itemsArray.push(newItem);
-          localStorage.setItem('itemsArray', JSON.stringify(itemsArray));
+        if (this.itemsArray) {
+          this.itemsArray.push(newItem);
+          localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
         } else {
           localStorage.setItem('itemsArray', JSON.stringify([newItem]));
         }
+        Swal.fire({
+          title: 'Item salvo com sucesso',
+          icon: 'success'
+        });
+      } else {
+        const indexEdit = this.itemsArray.findIndex(f => f.id === this.route.snapshot.params.id);
+        this.itemsArray[indexEdit] = newItem;
+        localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
+        Swal.fire({
+          title: 'Item cadastrado com sucesso',
+          icon: 'success'
+        });
       }
       this.router.navigate(['']);
-      Swal.fire({
-        title: 'Item salvo com sucesso',
-        icon: 'success'
-      });
+
     } else {
       this.itemForm.markAllAsTouched();
     }

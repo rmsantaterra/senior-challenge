@@ -1,6 +1,6 @@
 <div class="full">
 
-    <div class="title" (click)="teste()">
+    <div class="title">
         {{ type }}
     </div>
 
@@ -48,18 +48,22 @@
                     <div class="align-contents" fxFlex="50">
                         <mat-form-field>
                             <input matInput type="number" min="0" [formControl]="itemForm.controls.quantity"
+                                (input)="changeQuantityInput(itemForm.controls.measurementUnit.value)"
                                 [ngClass]="itemForm.controls.quantity.touched && itemForm.controls.quantity.invalid ? 'error-field' : ''">
                         </mat-form-field>
+                        <span style="width: 30px;">
+                            {{ measurementAbbreviation(itemForm.controls.measurementUnit.value) }}
+                        </span>
                     </div>
 
                     <!-- #9c9c9c -->
-                    <div class="btn-num" style="margin-right: 27px; background-color: #fc6464;"
+                    <div class="btn-num" style="margin-right: 47px; background-color: #fc6464;"
                         (click)="changeQuantity('remove')"
                         [ngClass]="!itemForm.controls.quantity.value ? 'btn-disabled' : ''">
                         <mat-icon aria-hidden="false" class="icon-btn">remove</mat-icon>
                     </div>
 
-                    <div class="btn-num" style="margin-right: 10px; background-color: #2c7c9c;"
+                    <div class="btn-num" style="margin-right: 30px; background-color: #2c7c9c;"
                         (click)="changeQuantity('add')">
                         <mat-icon aria-hidden="false" class="icon-btn">add</mat-icon>
                     </div>
@@ -122,7 +126,7 @@
                 <div fxFlex="58"></div>
 
                 <div fxFlex="20">
-                    <button mat-raised-button class="default-back-button">
+                    <button mat-raised-button class="default-back-button" (click)="cancel()">
                         <span>Cancelar</span>
                     </button>
                 </div>
