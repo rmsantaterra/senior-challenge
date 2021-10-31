@@ -16,6 +16,7 @@
                 <div class="align-contents" fxFlex="auto">
                     <mat-form-field>
                         <input matInput type="text" maxlength="50" [formControl]="itemForm.controls.name"
+                            (keypress)="letterOnly($event)"
                             [ngClass]="itemForm.controls.name.touched && itemForm.controls.name.invalid ? 'error-field' : ''">
                     </mat-form-field>
                 </div>
@@ -118,7 +119,7 @@
 
                     <div class="align-contents" fxFlex="50">
                         <mat-form-field>
-                            <input matInput type="date" [formControl]="itemForm.controls.manufacturing"
+                            <input matInput type="date" [formControl]="itemForm.controls.manufacturing" [max]="getValidity()"
                                 [ngClass]="itemForm.controls.manufacturing.touched && itemForm.controls.manufacturing.invalid ? 'error-field' : ''">
                         </mat-form-field>
                     </div>

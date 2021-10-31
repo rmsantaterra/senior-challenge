@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { measurementUnit } from 'src/app/utils/consts';
 import { measurementAbbreviation } from 'src/app/utils/methods';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list',
@@ -55,9 +56,21 @@ export class ListComponent implements OnInit {
   }
 
   remove(id: string): void {
-    this.itemsArray.splice(this.itemsArray.findIndex(f => f.id === id), 1);
-    localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
-    this.prepareDataSource();
+    Swal.fire({
+      title: 'Tem certeza que deseja excluir item?',
+      icon: 'question',
+      reverseButtons: true,
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não',
+    }).then(x => {
+      if (x.value) {
+        this.itemsArray.splice(this.itemsArray.findIndex(f => f.id === id), 1);
+        localStorage.setItem('itemsArray', JSON.stringify(this.itemsArray));
+        this.prepareDataSource();
+      }
+    });
   }
 
 }

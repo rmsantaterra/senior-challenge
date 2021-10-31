@@ -14,9 +14,10 @@ body {
 }
 
 .full {
-    height: 100%;
+    height: calc(100% - 50px);
     width: inherit;
     padding: 30px 20px 20px 20px;
+    min-width: 780px;
 }
 
 .title {

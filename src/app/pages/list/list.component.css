@@ -7,6 +7,7 @@ table {
     border: solid 1px #e3e7ee;
     font-size: 1em;
     height: calc(100vh - 290px);
+    overflow: auto;
 }
 
 tr.mat-header-row {

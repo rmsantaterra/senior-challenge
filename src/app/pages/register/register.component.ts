@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     this.itemForm = this.formBuilder.group({
       name: [this.item.name, Validators.compose([Validators.required])],
       measurementUnit: [this.item.measurementUnit, Validators.compose([Validators.required])],
-      quantity: [this.item.quantity, Validators.compose([Validators.required])],
+      quantity: [this.item.quantity],
       amount: [this.item.amount, Validators.compose([Validators.required])],
       perishable: [this.item.perishable, Validators.compose([Validators.required])],
       validity: [{ value: this.item.validity, disabled: !this.item.perishable }],
@@ -54,6 +54,21 @@ export class RegisterComponent implements OnInit {
       this.item = this.itemsArray.find(f => f.id === this.route.snapshot.params.id);
     } else {
       this.type = 'Cadastro de Item';
+    }
+  }
+
+  letterOnly(event): boolean {
+    const charCode = event.keyCode;
+
+    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode === 8 || charCode === 32) {
+      return true;
+    }
+    return false;
+  }
+
+  getValidity(): Date {
+    if (this.itemForm.controls.validity.valid) {
+      return this.itemForm.controls.validity.value;
     }
   }
 
@@ -126,6 +141,12 @@ export class RegisterComponent implements OnInit {
         Swal.fire({
           title: 'Ocorreu um erro ao salvar item',
           text: 'Data de fabricação não pode ser maior que data de validade.',
+          icon: 'error'
+        });
+      } else if (newItem.amount === 0) {
+        Swal.fire({
+          title: 'Ocorreu um erro ao salvar item',
+          text: 'Preço não pode ser R$0,00',
           icon: 'error'
         });
       } else {
