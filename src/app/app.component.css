@@ -23,7 +23,10 @@
   width: inherit;
   margin: 25px;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  min-width: 815px;
+  width: inherit;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: inherit;
 }
 
 .selected-menu {
